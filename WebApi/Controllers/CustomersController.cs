@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using AppServices.Services;
+using DomainModels.Models;
 using DomainServices.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace WebApi.Controllers
     [ApiController]
     public class CustomersController : Controller
     {
-        private readonly ICustomersServices _repository;
+        private readonly ICustomerAppServices _repository;
 
-        public CustomersController(ICustomersServices repository)
+        public CustomersController(ICustomerAppServices repository)
         {
             _repository = repository;
         }
