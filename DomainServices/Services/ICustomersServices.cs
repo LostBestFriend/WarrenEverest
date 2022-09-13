@@ -1,8 +1,8 @@
-﻿using WebApi.Models;
+﻿using DomainModels.Models;
 
-namespace WebApi.Repository
+namespace DomainServices.Services
 {
-    public interface ICustomersRepository
+    public interface ICustomersServices
     {
         List<Customer> GetAll();
         Customer? GetById(int id);

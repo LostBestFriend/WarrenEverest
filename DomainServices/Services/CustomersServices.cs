@@ -1,8 +1,8 @@
-﻿using WebApi.Models;
+﻿using DomainModels.Models;
 
-namespace WebApi.Repository
+namespace DomainServices.Services
 {
-    public class CustomersRepository : ICustomersRepository
+    public class CustomersServices : ICustomersServices
     {
         private readonly List<Customer> _customerList = new();
 

@@ -1,6 +1,4 @@
-﻿using System.Net.NetworkInformation;
-
-namespace WebApi.Utils
+﻿namespace DomainModels.ExtensionMethods
 {
     public static class MyExtensions
     {

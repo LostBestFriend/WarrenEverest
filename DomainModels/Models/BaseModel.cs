@@ -1,4 +1,4 @@
-﻿namespace WebApi.Models
+﻿namespace DomainModels.Models
 {
     public abstract class BaseModel
     {
