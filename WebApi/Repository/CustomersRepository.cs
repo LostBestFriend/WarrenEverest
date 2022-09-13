@@ -24,6 +24,7 @@ namespace WebApi.Repository
         {
             return _customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email);
         }
+
         public bool AlreadyExistsUpdate(Customer model, long id)
         {
             return _customerList.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != id);

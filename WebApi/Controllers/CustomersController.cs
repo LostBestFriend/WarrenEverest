@@ -29,7 +29,7 @@ namespace WebApi.Controllers
             var customer = _repository.GetById(id);
             if (customer is null)
             {
-                return NotFound();
+                return NotFound($"Usuário não encontrado para o id: {id}");
             }
             return Ok(customer);
         }
@@ -39,11 +39,6 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post(Customer model)
         {
-            if (!ModelState.IsValid)
-            {
-                string allErrors = ModelState.ValidationState.ToString("-");
-                return BadRequest(allErrors);
-            }
             bool success = _repository.Create(model);
             if (success)
             {
@@ -57,18 +52,13 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Update(string cpf, Customer model)
         {
-            if (!ModelState.IsValid)
-            {
-                string allErrors = ModelState.ValidationState.ToString("-");
-                return BadRequest(allErrors);
-            }
             int success = _repository.Update(cpf, model);
             switch (success)
             {
                 case -1:
                     return BadRequest("O CPF ou E-mail utilizado já está em uso");
                 case 0:
-                    return NotFound();
+                    return NotFound($"Usuário não encontrado para o id: {cpf}");
                 default:
                     return Ok();
             }
@@ -84,7 +74,7 @@ namespace WebApi.Controllers
             {
                 return Ok();
             }
-            return NotFound();
+            return NotFound($"Usuário não encontrado para o id: {id}");
         }
     }
 }
