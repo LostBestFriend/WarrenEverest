@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using WebApi.Models;
 using WebApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ICustomersRepository, CustomersRepository>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddScoped<IValidator<Customer>, CustomerValidator>();
 
 var app = builder.Build();
 

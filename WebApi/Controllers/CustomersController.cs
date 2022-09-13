@@ -1,7 +1,4 @@
-﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 using WebApi.Repository;
 
@@ -11,9 +8,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class CustomersController : Controller
     {
-        private ICustomersRepository _repository;
-        CustomerValidator validator = new CustomerValidator();
-
+        private readonly ICustomersRepository _repository;
 
         public CustomersController(ICustomersRepository repository)
         {
@@ -31,9 +26,8 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
-
-            Customer? customer = _repository.GetById(id);
-            if (customer == null)
+            var customer = _repository.GetById(id);
+            if (customer is null)
             {
                 return NotFound();
             }
@@ -45,20 +39,17 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post(Customer model)
         {
-            ValidationResult result = validator.Validate(model);
-            bool doesNotExists = _repository.DoesNotExists(model);
-
-            if (result.IsValid && doesNotExists)
+            if (!ModelState.IsValid)
             {
-                _repository.Create(model);
-                return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
-            }
-            else if (!result.IsValid)
-            {
-                string allErrors = result.ToString("-");
+                string allErrors = ModelState.ValidationState.ToString("-");
                 return BadRequest(allErrors);
             }
-            return BadRequest("O CPF ou E-mail já está em uso.");
+            bool success = _repository.Create(model);
+            if (success)
+            {
+                return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
+            }
+            return BadRequest("O CPF ou E-mail utilizado já está em uso");
         }
 
         [HttpPut]
@@ -66,13 +57,21 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Update(string cpf, Customer model)
         {
-            bool doesNotExists = _repository.DoesNotExists(model);
-            bool success = _repository.Update(cpf, model);
-            if (success)
+            if (!ModelState.IsValid)
             {
-                return Ok();
+                string allErrors = ModelState.ValidationState.ToString("-");
+                return BadRequest(allErrors);
             }
-            return NotFound();
+            int success = _repository.Update(cpf, model);
+            switch (success)
+            {
+                case -1:
+                    return BadRequest("O CPF ou E-mail utilizado já está em uso");
+                case 0:
+                    return NotFound();
+                default:
+                    return Ok();
+            }
         }
 
         [HttpDelete]

@@ -1,4 +1,6 @@
-﻿namespace WebApi.Models
+﻿using WebApi.Utils;
+
+namespace WebApi.Models
 {
     public class Customer : BaseModel
     {
@@ -7,18 +9,17 @@
             FullName = fullName;
             Email = email;
             EmailConfirmation = emailConfirmation;
-            Cpf = cpf.Replace(".", "").Replace("-", "").Replace(",", "").Trim();
+            Cpf = cpf.FormatString();
             Cellphone = cellphone;
             DateOfBirth = dateOfBirth;
             EmailSms = emailSms;
             Whatsapp = whatsapp;
             Country = country;
             City = city;
-            PostalCode = postalCode.Replace(".", "").Replace("-", "").Replace(",", "").Trim();
+            PostalCode = postalCode.FormatString();
             Address = address;
             Number = number;
         }
-
         public string FullName { get; set; }
         public string Email { get; set; }
         public string EmailConfirmation { get; set; }
@@ -32,6 +33,5 @@
         public string PostalCode { get; set; }
         public string Address { get; set; }
         public int Number { get; set; }
-
     }
 }

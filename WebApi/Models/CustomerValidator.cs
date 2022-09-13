@@ -71,12 +71,7 @@ namespace WebApi.Models
                 module = 11 - module;
             }
             finalDigits += module.ToString();
-
-            if (cpf.EndsWith(finalDigits))
-            {
-                return true;
-            }
-            return false;
+            return cpf.EndsWith(finalDigits);
         }
     }
 }

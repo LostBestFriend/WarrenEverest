@@ -6,13 +6,11 @@ namespace WebApi.Repository
     {
         List<Customer> GetAll();
         Customer? GetById(int id);
-        void Create(Customer model);
-        bool DoesNotExists(Customer model);
+        bool Create(Customer model);
+        bool AlreadyExists(Customer model);
+        public bool AlreadyExistsUpdate(Customer model, long id);
         Customer? GetByCpf(string cpf);
-        bool Update(string cpf, Customer model);
+        int Update(string cpf, Customer model);
         bool Delete(int id);
-
-
-
     }
 }
