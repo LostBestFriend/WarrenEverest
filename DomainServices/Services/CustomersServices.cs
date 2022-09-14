@@ -21,11 +21,6 @@ namespace DomainServices.Services
             return _customerList.FirstOrDefault(customer => customer.Id == id);
         }
 
-        public bool AlreadyExistsUpdate(Customer model, long id)
-        {
-            return _customerList.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != id);
-        }
-
         public List<Customer> GetAll()
         {
             return _customerList;
@@ -37,16 +32,16 @@ namespace DomainServices.Services
             return _customerList.FirstOrDefault(customer => customer.Cpf == cpf);
         }
 
-        public void Update(long id, Customer model)
+        public void Update(Customer model)
         {
-            int index = _customerList.FindIndex(customer => customer.Id == id);
+            int index = _customerList.FindIndex(customer => customer.Id == model.Id);
 
-            if (index == -1) throw new ArgumentException($"Usuário não encontrado para o id: {id}");
-            bool alreadyExist = AlreadyExistsUpdate(model, _customerList[index].Id);
+            if (index == -1) throw new ArgumentException($"Usuário não encontrado para o id: {model.Id}");
 
-            if (alreadyExist) throw new ArgumentNullException($"Cpf ou E-mail já está em uso. Email: {model.Email}, Cpf: {model.Cpf}");
-
-            model.Id = _customerList[index].Id;
+            if(_customerList.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
+            {
+                throw new ArgumentException("CPf ou Email informado já está em uso");
+            }
             _customerList[index] = model;
         }
 

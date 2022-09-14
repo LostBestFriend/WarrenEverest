@@ -7,9 +7,8 @@ namespace DomainServices.Services
         List<Customer> GetAll();
         Customer? GetById(int id);
         bool Create(Customer model);
-        public bool AlreadyExistsUpdate(Customer model, long id);
         Customer? GetByCpf(string cpf);
-        void Update(long id, Customer model);
+        void Update(Customer model);
         bool Delete(int id);
     }
 }

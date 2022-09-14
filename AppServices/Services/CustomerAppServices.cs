@@ -35,7 +35,8 @@ namespace AppServices.Services
 
         public void Update(long id, Customer model)
         {
-            _customerServices.Update(id, model);
+            model.Id = id;
+            _customerServices.Update(model);
         }
 
         public bool Delete(int id)
