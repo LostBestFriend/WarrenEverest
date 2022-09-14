@@ -11,7 +11,14 @@ namespace DomainServices.Services
         {
             if (_customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email)) return false;
 
-            model.Id = _customerList.Count + 1;
+            if (_customerList.Any())
+            {
+                model.Id = _customerList.Last().Id +1;
+                _customerList.Add(model);
+                return true;
+            }
+
+            model.Id =  1;
             _customerList.Add(model);
             return true;
         }

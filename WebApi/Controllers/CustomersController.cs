@@ -1,5 +1,5 @@
-﻿using AppServices.Services;
-using DomainModels.Models;
+﻿using AppModels.Mapper;
+using AppServices.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(Customer model)
+        public IActionResult Post(CustomerCreateDto model)
         {
             bool success = _repository.Create(model);
             if (success)
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Update(long id, Customer model)
+        public IActionResult Update(long id, CustomerUpdateDto model)
         {
             try
             {

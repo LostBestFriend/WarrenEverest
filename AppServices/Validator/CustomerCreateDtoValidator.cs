@@ -1,11 +1,11 @@
-﻿using DomainModels.Models;
+﻿using AppModels.Mapper;
 using FluentValidation;
 
 namespace AppServices.Validator
 {
-    public class CustomerValidator : AbstractValidator<Customer>
+    public class CustomerCreateDtoValidator : AbstractValidator<CustomerCreateDto>
     {
-        public CustomerValidator()
+        public CustomerCreateDtoValidator()
         {
             RuleFor(customer => customer.FullName)
                 .NotEmpty().WithMessage("O campo Nome Completo é obrigatório. ");
