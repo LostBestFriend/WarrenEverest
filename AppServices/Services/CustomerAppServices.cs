@@ -1,4 +1,6 @@
-﻿using DomainModels.Models;
+﻿using AppModels.Mapper;
+using AutoMapper;
+using DomainModels.Models;
 using DomainServices.Services;
 
 namespace AppServices.Services
@@ -6,37 +8,42 @@ namespace AppServices.Services
     public class CustomerAppServices : ICustomerAppServices
     {
         private readonly ICustomersServices _customerServices;
+        private readonly IMapper _mapper;
 
-        public CustomerAppServices(ICustomersServices customerServices)
+        public CustomerAppServices(ICustomersServices customerServices, IMapper mapper)
         {
             _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public List<Customer> GetAll()
+        public List<CustomerResultDto> GetAll()
         {
-            return _customerServices.GetAll();
+            var result =_customerServices.GetAll();
+            return _mapper.Map<List<CustomerResultDto>>(result);
         }
 
-        public Customer? GetById(int id)
+        public CustomerResultDto? GetById(int id)
         {
-            return _customerServices.GetById(id);
+            var result = _customerServices.GetById(id);
+            return _mapper.Map<CustomerResultDto>(result);
         }
 
-        public bool Create(Customer model)
+        public long Create(CustomerCreateDto model)
         {
-            return _customerServices.Create(model);
+            Customer customerModel = _mapper.Map<Customer>(model);
+            return _customerServices.Create(customerModel).Id;
         }
 
-
-        public Customer? GetByCpf(string cpf)
+        public CustomerResultDto? GetByCpf(string cpf)
         {
-            return _customerServices.GetByCpf(cpf);
+            var result = _customerServices.GetByCpf(cpf);
+            return _mapper.Map<CustomerResultDto>(result);
         }
 
-        public void Update(long id, Customer model)
+        public void Update(long id, CustomerUpdateDto model)
         {
-            model.Id = id;
-            _customerServices.Update(model);
+            Customer customerModel = _mapper.Map<Customer>(model);
+            _customerServices.Update(customerModel);
         }
 
         public bool Delete(int id)

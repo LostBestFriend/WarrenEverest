@@ -1,14 +1,15 @@
-﻿using DomainModels.Models;
+﻿using AppModels.Mapper;
+using DomainModels.Models;
 
 namespace AppServices.Services
 {
     public interface ICustomerAppServices
     {
-        bool Create(Customer model);
+        long Create(CustomerCreateDto model);
         bool Delete(int id);
-        List<Customer> GetAll();
-        Customer? GetByCpf(string cpf);
-        Customer? GetById(int id);
-        void Update(long id, Customer model);
+        List<CustomerResultDto> GetAll();
+        CustomerResultDto? GetByCpf(string cpf);
+        CustomerResultDto? GetById(int id);
+        void Update(long id, CustomerUpdateDto model);
     }
 }

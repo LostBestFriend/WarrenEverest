@@ -1,5 +1,5 @@
-﻿using AppServices.Services;
-using DomainModels.Models;
+﻿using AppModels.Mapper;
+using AppServices.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -37,20 +37,25 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(Customer model)
+        public IActionResult Post(CustomerCreateDto model)
         {
-            bool success = _repository.Create(model);
-            if (success)
+            try
             {
-                return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
+                long id = _repository.Create(model);
+                return CreatedAtAction(nameof(GetById), new { id = id }, id);
+            } catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            } catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
-            return BadRequest("O CPF ou E-mail utilizado já está em uso");
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Update(long id, Customer model)
+        public IActionResult Update(long id, CustomerUpdateDto model)
         {
             try
             {
