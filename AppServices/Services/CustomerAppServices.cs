@@ -9,7 +9,7 @@ namespace AppServices.Services
 
         public CustomerAppServices(ICustomersServices customerServices)
         {
-            _customerServices = customerServices;
+            _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
         }
 
         public List<Customer> GetAll()
@@ -42,9 +42,9 @@ namespace AppServices.Services
             return _customerServices.GetByCpf(cpf);
         }
 
-        public int Update(string cpf, Customer model)
+        public void Update(long id, Customer model)
         {
-            return _customerServices.Update(cpf, model);
+            _customerServices.Update(id, model);
         }
 
         public bool Delete(int id)

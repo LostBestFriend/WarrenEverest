@@ -42,22 +42,17 @@ namespace DomainServices.Services
             return _customerList.FirstOrDefault(customer => customer.Cpf == cpf);
         }
 
-        public int Update(string cpf, Customer model)
+        public void Update(long id, Customer model)
         {
-            cpf.FormatString();
-            int index = _customerList.FindIndex(customer => customer.Cpf == cpf);
-            if (index == -1)
-            {
-                return 0;
-            }
+            int index = _customerList.FindIndex(customer => customer.Id == id);
+
+            if (index == -1) throw new ArgumentException($"Cpf ou E-mail já está em uso. Email: {model.Email}, Cpf: {model.Cpf}");
             bool alreadyExist = AlreadyExistsUpdate(model, _customerList[index].Id);
-            if (alreadyExist) return -1;
-            else
-            {   
-                model.Id = _customerList[index].Id;
-                _customerList[index] = model;
-                return 1;
-            }
+
+            if (alreadyExist) throw new ArgumentNullException($"Usuário não encontrado para o id: {id}");
+
+            model.Id = _customerList[index].Id;
+            _customerList[index] = model;
         }
 
         public bool Delete(int id)

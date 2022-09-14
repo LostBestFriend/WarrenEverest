@@ -10,7 +10,7 @@ namespace DomainServices.Services
         bool AlreadyExists(Customer model);
         public bool AlreadyExistsUpdate(Customer model, long id);
         Customer? GetByCpf(string cpf);
-        int Update(string cpf, Customer model);
+        void Update(long id, Customer model);
         bool Delete(int id);
     }
 }

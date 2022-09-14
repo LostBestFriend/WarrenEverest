@@ -1,6 +1,5 @@
 ﻿using AppServices.Services;
 using DomainModels.Models;
-using DomainServices.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -48,20 +47,27 @@ namespace WebApi.Controllers
             return BadRequest("O CPF ou E-mail utilizado já está em uso");
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Update(string cpf, Customer model)
+        public IActionResult Update(long id, Customer model)
         {
-            int success = _repository.Update(cpf, model);
-            switch (success)
+            try
             {
-                case -1:
-                    return BadRequest("O CPF ou E-mail utilizado já está em uso");
-                case 0:
-                    return NotFound($"Usuário não encontrado para o id: {cpf}");
-                default:
-                    return Ok();
+                _repository.Update(id, model);
+                return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
         }
 

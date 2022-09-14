@@ -11,6 +11,6 @@ namespace AppServices.Services
         List<Customer> GetAll();
         Customer? GetByCpf(string cpf);
         Customer? GetById(int id);
-        int Update(string cpf, Customer model);
+        void Update(long id, Customer model);
     }
 }
