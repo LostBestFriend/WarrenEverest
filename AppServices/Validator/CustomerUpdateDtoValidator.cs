@@ -9,27 +9,36 @@ namespace AppServices.Validator
         {
             RuleFor(customer => customer.FullName)
                 .NotEmpty().WithMessage("O campo Nome Completo é obrigatório. ");
+
             RuleFor(customer => customer.Email)
                 .NotEmpty().WithMessage("O campo Email é obrigatório. ")
                 .EmailAddress().WithMessage("Este endereço de e-mail não é válido. ")
                 .Equal(customer => customer.EmailConfirmation).WithMessage("Os e-mails informados devem ser os mesmos. ");
+
             RuleFor(customer => customer.Cpf)
                 .NotNull().WithMessage("CPF não pode estar em branco.")
                 .Must(cpf => ValidateCpf(cpf)).WithMessage("Este CPF não é válido. ");
+
             RuleFor(customer => customer.DateOfBirth)
                 .NotEmpty().WithMessage("O campo Data de Nascimento é obrigatório. ");
+
             RuleFor(customer => customer.Country)
                 .NotEmpty().WithMessage("O campo País é obrigatório. ");
+
             RuleFor(customer => customer.City)
                 .NotEmpty().WithMessage("O campo Cidade é obrigatório. ");
+
             RuleFor(customer => customer.PostalCode)
                 .NotEmpty().WithMessage("O campo CEP é obrigatório. ")
                 .Length(8).WithMessage("Este CEP não é válido ");
+
             RuleFor(customer => customer.Address)
                 .NotEmpty().WithMessage("O campo Endereço é obrigatório. ");
+
             RuleFor(customer => customer.Number)
                 .NotEmpty().WithMessage("O campo Número é obrigatório. ");
         }
+
         public bool ValidateCpf(string cpf)
         {
             int[] firstMultiplier = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };

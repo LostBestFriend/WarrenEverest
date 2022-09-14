@@ -12,8 +12,8 @@ namespace AppServices.Services
 
         public CustomerAppServices(ICustomersServices customerServices,IMapper mapper)
         {
-            _customerServices = customerServices;
-            _mapper = mapper;
+            _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public List<CustomerResultDto> GetAll()
@@ -28,10 +28,10 @@ namespace AppServices.Services
             return _mapper.Map<CustomerResultDto>(result);
         }
 
-        public bool Create(CustomerCreateDto model)
+        public long Create(CustomerCreateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return _customerServices.Create(customerModel);
+            return _customerServices.Create(customerModel).Id;
         }
 
             
@@ -43,7 +43,6 @@ namespace AppServices.Services
 
         public void Update(long id, CustomerUpdateDto model)
         {
-            model.Id = id;
             Customer customerModel = _mapper.Map<Customer>(model);
             _customerServices.Update(customerModel);
         }

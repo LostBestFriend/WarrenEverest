@@ -7,20 +7,16 @@ namespace DomainServices.Services
     {
         private readonly List<Customer> _customerList = new();
 
-        public bool Create(Customer model)
+        public Customer Create(Customer model)
         {
-            if (_customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email)) return false;
-
-            if (_customerList.Any())
+            if (_customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
             {
-                model.Id = _customerList.Last().Id +1;
-                _customerList.Add(model);
-                return true;
+                throw new ArgumentException("O Cpf ou Email já está em uso");
             }
 
-            model.Id =  1;
+            model.Id = _customerList.LastOrDefault()?.Id + 1 ?? 1;
             _customerList.Add(model);
-            return true;
+            return model;
         }
 
         public Customer? GetById(int id)
@@ -45,7 +41,7 @@ namespace DomainServices.Services
 
             if (index == -1) throw new ArgumentException($"Usuário não encontrado para o id: {model.Id}");
 
-            if(_customerList.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
+            if (_customerList.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
             {
                 throw new ArgumentException("CPf ou Email informado já está em uso");
             }

@@ -39,12 +39,17 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post(CustomerCreateDto model)
         {
-            bool success = _repository.Create(model);
-            if (success)
+            try
             {
-                return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
+                long id = _repository.Create(model);
+                return CreatedAtAction(nameof(GetById), new { id = id }, id);
+            } catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            } catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
-            return BadRequest("O CPF ou E-mail utilizado já está em uso");
         }
 
         [HttpPut("{id}")]

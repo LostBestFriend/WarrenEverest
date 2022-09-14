@@ -5,7 +5,7 @@ namespace AppServices.Services
 {
     public interface ICustomerAppServices
     {
-        bool Create(CustomerCreateDto model);
+        long Create(CustomerCreateDto model);
         bool Delete(int id);
         List<CustomerResultDto> GetAll();
         CustomerResultDto? GetByCpf(string cpf);

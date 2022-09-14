@@ -2,7 +2,6 @@
 {
     public class CustomerUpdateDto
     {
-        public long Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string EmailConfirmation { get; set; }
@@ -17,9 +16,8 @@
         public string Address { get; set; }
         public int Number { get; set; }
 
-        public CustomerUpdateDto(long id, string fullName, string email, string emailConfirmation, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
+        public CustomerUpdateDto(string fullName, string email, string emailConfirmation, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
         {
-            Id = id;
             FullName = fullName;
             Email = email;
             EmailConfirmation = emailConfirmation;
