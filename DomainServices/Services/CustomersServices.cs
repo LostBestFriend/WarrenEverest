@@ -9,8 +9,8 @@ namespace DomainServices.Services
 
         public bool Create(Customer model)
         {
-            bool alreadyExitst = AlreadyExists(model);
-            if (alreadyExitst) return false;
+            if (_customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email)) return false;
+
             model.Id = _customerList.Count + 1;
             _customerList.Add(model);
             return true;
@@ -19,11 +19,6 @@ namespace DomainServices.Services
         public Customer? GetById(int id)
         {
             return _customerList.FirstOrDefault(customer => customer.Id == id);
-        }
-
-        public bool AlreadyExists(Customer model)
-        {
-            return _customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email);
         }
 
         public bool AlreadyExistsUpdate(Customer model, long id)

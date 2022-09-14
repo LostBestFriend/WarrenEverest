@@ -27,11 +27,6 @@ namespace AppServices.Services
             return _customerServices.Create(model);
         }
 
-        public bool AlreadyExists(Customer model)
-        {
-            return _customerServices.AlreadyExists(model);
-        }
-
         public bool AlreadyExistsUpdate(Customer model, long id)
         {
             return _customerServices.AlreadyExistsUpdate(model, id);
