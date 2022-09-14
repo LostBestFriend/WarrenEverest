@@ -27,10 +27,6 @@ namespace AppServices.Services
             return _customerServices.Create(model);
         }
 
-        public bool AlreadyExistsUpdate(Customer model, long id)
-        {
-            return _customerServices.AlreadyExistsUpdate(model, id);
-        }
 
         public Customer? GetByCpf(string cpf)
         {

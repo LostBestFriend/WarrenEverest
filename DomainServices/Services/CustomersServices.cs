@@ -41,10 +41,10 @@ namespace DomainServices.Services
         {
             int index = _customerList.FindIndex(customer => customer.Id == id);
 
-            if (index == -1) throw new ArgumentException($"Cpf ou E-mail já está em uso. Email: {model.Email}, Cpf: {model.Cpf}");
+            if (index == -1) throw new ArgumentException($"Usuário não encontrado para o id: {id}");
             bool alreadyExist = AlreadyExistsUpdate(model, _customerList[index].Id);
 
-            if (alreadyExist) throw new ArgumentNullException($"Usuário não encontrado para o id: {id}");
+            if (alreadyExist) throw new ArgumentNullException($"Cpf ou E-mail já está em uso. Email: {model.Email}, Cpf: {model.Cpf}");
 
             model.Id = _customerList[index].Id;
             _customerList[index] = model;

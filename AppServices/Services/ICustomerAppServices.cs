@@ -4,7 +4,6 @@ namespace AppServices.Services
 {
     public interface ICustomerAppServices
     {
-        bool AlreadyExistsUpdate(Customer model, long id);
         bool Create(Customer model);
         bool Delete(int id);
         List<Customer> GetAll();
