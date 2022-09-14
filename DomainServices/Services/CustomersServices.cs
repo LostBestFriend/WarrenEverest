@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using DomainModels.ExtensionMethods;
+using DomainModels.Models;
 
 namespace DomainServices.Services
 {
@@ -37,12 +38,14 @@ namespace DomainServices.Services
 
         public Customer? GetByCpf(string cpf)
         {
+            cpf.FormatString();
             return _customerList.FirstOrDefault(customer => customer.Cpf == cpf);
         }
 
-        public int Update(string Cpf, Customer model)
+        public int Update(string cpf, Customer model)
         {
-            int index = _customerList.FindIndex(customer => customer.Cpf == Cpf);
+            cpf.FormatString();
+            int index = _customerList.FindIndex(customer => customer.Cpf == cpf);
             if (index == -1)
             {
                 return 0;
@@ -50,7 +53,7 @@ namespace DomainServices.Services
             bool alreadyExist = AlreadyExistsUpdate(model, _customerList[index].Id);
             if (alreadyExist) return -1;
             else
-            {
+            {   
                 model.Id = _customerList[index].Id;
                 _customerList[index] = model;
                 return 1;
