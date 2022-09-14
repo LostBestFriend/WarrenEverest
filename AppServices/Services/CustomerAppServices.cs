@@ -10,7 +10,7 @@ namespace AppServices.Services
         private readonly ICustomersServices _customerServices;
         private readonly IMapper _mapper;
 
-        public CustomerAppServices(ICustomersServices customerServices,IMapper mapper)
+        public CustomerAppServices(ICustomersServices customerServices, IMapper mapper)
         {
             _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
