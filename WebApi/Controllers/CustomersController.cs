@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebApi.Models;
-using WebApi.Repository;
+﻿using AppServices.Services;
+using DomainModels.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
@@ -8,9 +8,9 @@ namespace WebApi.Controllers
     [ApiController]
     public class CustomersController : Controller
     {
-        private readonly ICustomersRepository _repository;
+        private readonly ICustomerAppServices _repository;
 
-        public CustomersController(ICustomersRepository repository)
+        public CustomersController(ICustomerAppServices repository)
         {
             _repository = repository;
         }
@@ -47,20 +47,27 @@ namespace WebApi.Controllers
             return BadRequest("O CPF ou E-mail utilizado já está em uso");
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Update(string cpf, Customer model)
+        public IActionResult Update(long id, Customer model)
         {
-            int success = _repository.Update(cpf, model);
-            switch (success)
+            try
             {
-                case -1:
-                    return BadRequest("O CPF ou E-mail utilizado já está em uso");
-                case 0:
-                    return NotFound($"Usuário não encontrado para o id: {cpf}");
-                default:
-                    return Ok();
+                _repository.Update(id, model);
+                return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
         }
 

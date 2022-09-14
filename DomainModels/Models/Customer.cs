@@ -1,6 +1,6 @@
-﻿using WebApi.Utils;
+﻿using DomainModels.ExtensionMethods;
 
-namespace WebApi.Models
+namespace DomainModels.Models
 {
     public class Customer : BaseModel
     {
