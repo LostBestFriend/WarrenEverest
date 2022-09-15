@@ -17,7 +17,7 @@
         public string Address { get; set; }
         public int Number { get; set; }
 
-
+        protected CustomerResultDto() { }
         public CustomerResultDto(long id, string fullName, string email, string emailConfirmation, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
         {
             Id = id;
