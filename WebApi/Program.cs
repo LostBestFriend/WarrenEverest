@@ -16,7 +16,7 @@ builder.Services.AddDbContext<WarrenEverestContext>(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddTransient<ICustomersServices, CustomersServices>();
+builder.Services.AddTransient<ICustomersServices, CustomersServices>();
 builder.Services.AddTransient<ICustomerAppServices, CustomerAppServices>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<CustomerCreateDto>, CustomerCreateDtoValidator>();
