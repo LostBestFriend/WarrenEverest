@@ -14,6 +14,5 @@ namespace Infrastructure.Data.Context
         public WarrenEverestContext(DbContextOptions<WarrenEverestContext> options) :base(options)
         {
         }
-
     }
 }
