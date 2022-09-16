@@ -43,7 +43,8 @@ namespace AppServices.Services
         public void Update(long id, CustomerUpdateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            _customerServices.Update(id, customerModel);
+            customerModel.Id = id;
+            _customerServices.Update(customerModel);
         }
 
         public void Delete(int id)

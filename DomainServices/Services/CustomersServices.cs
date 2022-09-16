@@ -40,15 +40,14 @@ namespace DomainServices.Services
             return _warrenEverestContext.Customer.FirstOrDefault(customer => customer.Cpf == cpf);
         }
 
-        public void Update(long id, Customer model)
+        public void Update( Customer model)
         {
-            if (!_warrenEverestContext.Customer.Any(customer => customer.Id == id)) throw new ArgumentNullException($"Cliente não encontrado para o id: {id}");
+            if (!_warrenEverestContext.Customer.Any(customer => customer.Id == model.Id)) throw new ArgumentNullException($"Cliente não encontrado para o id: {model.Id}");
 
-            if (_warrenEverestContext.Customer.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != id))
+            if (_warrenEverestContext.Customer.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
             {
                 throw new ArgumentException("CPf ou Email informado já está em uso");
             }
-            model.Id = id;
             _warrenEverestContext.Customer.Update(model);
             _warrenEverestContext.SaveChanges();
         }
@@ -58,7 +57,7 @@ namespace DomainServices.Services
             Customer? customertoRemove = _warrenEverestContext.Customer.FirstOrDefault(customer => customer.Id == id);
             if (customertoRemove is null)
             {
-                throw new ArgumentException($"Cliente não encontrado para o id: {id}");
+                throw new ArgumentNullException($"Cliente não encontrado para o id: {id}");
             }
             _warrenEverestContext.Customer.Remove(customertoRemove).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
             _warrenEverestContext.SaveChanges();

@@ -91,7 +91,7 @@ namespace WebApi.Controllers
                 _repository.Delete(id);
                 return Ok();
             }
-            catch (ArgumentException ex)
+            catch (ArgumentNullException ex)
             {
                 return NotFound(ex.Message);
             }

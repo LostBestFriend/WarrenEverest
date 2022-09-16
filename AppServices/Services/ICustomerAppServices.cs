@@ -10,6 +10,6 @@ namespace AppServices.Services
         List<CustomerResultDto> GetAll();
         CustomerResultDto? GetByCpf(string cpf);
         CustomerResultDto? GetById(int id);
-        void Update(long id, CustomerUpdateDto model);
+        void Update(CustomerUpdateDto model);
     }
 }
