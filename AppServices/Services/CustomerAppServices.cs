@@ -10,7 +10,7 @@ namespace AppServices.Services
         private readonly ICustomersServices _customerServices;
         private readonly IMapper _mapper;
 
-        public CustomerAppServices(ICustomersServices customerServices,IMapper mapper)
+        public CustomerAppServices(ICustomersServices customerServices, IMapper mapper)
         {
             _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -18,7 +18,7 @@ namespace AppServices.Services
 
         public List<CustomerResultDto> GetAll()
         {
-            var result =_customerServices.GetAll();
+            var result = _customerServices.GetAll();
             return _mapper.Map<List<CustomerResultDto>>(result);
         }
 
@@ -31,10 +31,10 @@ namespace AppServices.Services
         public long Create(CustomerCreateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return _customerServices.Create(customerModel).Id;
+            return _customerServices.Create(customerModel);
         }
 
-            
+
         public CustomerResultDto? GetByCpf(string cpf)
         {
             var result = _customerServices.GetByCpf(cpf);
@@ -44,12 +44,12 @@ namespace AppServices.Services
         public void Update(long id, CustomerUpdateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            _customerServices.Update(customerModel);
+            _customerServices.Update(id, customerModel);
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
-            return _customerServices.Delete(id);
+            _customerServices.Delete(id);
         }
     }
 }

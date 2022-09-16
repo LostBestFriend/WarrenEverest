@@ -12,8 +12,7 @@ namespace AppServices.Validator
 
             RuleFor(customer => customer.Email)
                 .NotEmpty().WithMessage("O campo Email é obrigatório. ")
-                .EmailAddress().WithMessage("Este endereço de e-mail não é válido. ")
-                .Equal(customer => customer.EmailConfirmation).WithMessage("Os e-mails informados devem ser os mesmos. ");
+                .EmailAddress().WithMessage("Este endereço de e-mail não é válido. ");
 
             RuleFor(customer => customer.Cpf)
                 .NotNull().WithMessage("CPF não pode estar em branco.")

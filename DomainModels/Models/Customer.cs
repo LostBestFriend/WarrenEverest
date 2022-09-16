@@ -4,7 +4,7 @@ namespace DomainModels.Models
 {
     public class Customer : BaseModel
     {
-        public Customer(string fullName, string email, string emailConfirmation, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
+        public Customer(string fullName, string email, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
         {
             FullName = fullName;
             Email = email;

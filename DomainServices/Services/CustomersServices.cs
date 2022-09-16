@@ -1,59 +1,67 @@
 ﻿using DomainModels.ExtensionMethods;
 using DomainModels.Models;
+using Infrastructure.Data.Context;
 
 namespace DomainServices.Services
 {
     public class CustomersServices : ICustomersServices
     {
-        private readonly List<Customer> _customerList = new();
+        private readonly WarrenEverestContext _warrenEverestContext;
 
-        public Customer Create(Customer model)
+        public CustomersServices(WarrenEverestContext warrenEverestContext)
         {
-            if (_customerList.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
+            _warrenEverestContext = warrenEverestContext ?? throw new ArgumentNullException(nameof(warrenEverestContext));
+        }
+
+        public long Create(Customer model)
+        {
+            if (_warrenEverestContext.Customer.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
             {
                 throw new ArgumentException("O Cpf ou Email já está em uso");
             }
-
-            model.Id = _customerList.LastOrDefault()?.Id + 1 ?? 1;
-            _customerList.Add(model);
-            return model;
+            _warrenEverestContext.Customer.Add(model);
+            _warrenEverestContext.SaveChanges();
+            return model.Id;
         }
 
         public Customer? GetById(int id)
         {
-            return _customerList.FirstOrDefault(customer => customer.Id == id);
+            return _warrenEverestContext.Customer.FirstOrDefault(customer => customer.Id == id);
         }
 
-        public List<Customer> GetAll()
+        public IEnumerable<Customer> GetAll()
         {
-            return _customerList;
+            return _warrenEverestContext.Customer.ToList();
         }
 
         public Customer? GetByCpf(string cpf)
         {
             cpf.FormatString();
-            return _customerList.FirstOrDefault(customer => customer.Cpf == cpf);
+            return _warrenEverestContext.Customer.FirstOrDefault(customer => customer.Cpf == cpf);
         }
 
-        public void Update(Customer model)
+        public void Update(long id, Customer model)
         {
-            int index = _customerList.FindIndex(customer => customer.Id == model.Id);
+            if (!_warrenEverestContext.Customer.Any(customer => customer.Id == id)) throw new ArgumentNullException($"Cliente não encontrado para o id: {id}");
 
-            if (index == -1) throw new ArgumentException($"Usuário não encontrado para o id: {model.Id}");
-
-            if (_customerList.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
+            if (_warrenEverestContext.Customer.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != id))
             {
                 throw new ArgumentException("CPf ou Email informado já está em uso");
             }
-            _customerList[index] = model;
+            model.Id = id;
+            _warrenEverestContext.Customer.Update(model);
+            _warrenEverestContext.SaveChanges();
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
-            var customerToRemove = _customerList.FirstOrDefault(customer => customer.Id == id);
-            if (customerToRemove is null) return false;
-            _customerList.Remove(customerToRemove);
-            return true;
+            Customer? customertoRemove = _warrenEverestContext.Customer.FirstOrDefault(customer => customer.Id == id);
+            if (customertoRemove is null)
+            {
+                throw new ArgumentException($"Cliente não encontrado para o id: {id}");
+            }
+            _warrenEverestContext.Customer.Remove(customertoRemove).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            _warrenEverestContext.SaveChanges();
         }
     }
 }
