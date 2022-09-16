@@ -34,7 +34,6 @@ namespace AppServices.Services
             return _customerServices.Create(customerModel);
         }
 
-
         public CustomerResultDto? GetByCpf(string cpf)
         {
             var result = _customerServices.GetByCpf(cpf);
