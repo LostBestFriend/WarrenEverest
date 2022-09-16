@@ -20,6 +20,9 @@ namespace Infrastructure.Data.Mapping
                 .IsRequired()
                 .HasColumnName("Email");
 
+            builder.HasIndex(customer => customer.Email)
+                .IsUnique();
+
             builder.Property(customer => customer.Cpf)
                 .IsRequired()
                 .HasColumnName("Cpf");
