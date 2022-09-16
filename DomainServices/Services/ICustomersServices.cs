@@ -8,7 +8,7 @@ namespace DomainServices.Services
         Customer? GetById(int id);
         long Create(Customer model);
         Customer? GetByCpf(string cpf);
-        void Update(long id, Customer model);
+        void Update(Customer model);
         void Delete(int id);
     }
 }
