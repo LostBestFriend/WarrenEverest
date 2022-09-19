@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(WarrenEverestContext))]
-    [Migration("20220919171846_AlteringCustomerTableCollumnSizes")]
-    partial class AlteringCustomerTableCollumnSizes
+    [Migration("20220919181338_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,22 +30,22 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(60)")
                         .HasColumnName("Address");
 
                     b.Property<string>("Cellphone")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(20)")
                         .HasColumnName("Cellphone");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(30)")
                         .HasColumnName("City");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(30)")
                         .HasColumnName("Country");
 
                     b.Property<string>("Cpf")
@@ -68,7 +68,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(250)")
                         .HasColumnName("FullName");
 
                     b.Property<int>("Number")
