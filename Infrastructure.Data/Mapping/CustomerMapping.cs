@@ -19,7 +19,7 @@ namespace Infrastructure.Data.Mapping
             builder.Property(customer => customer.FullName)
                 .IsRequired()
                 .HasColumnName("FullName")
-                .HasColumnType("text");
+                .HasColumnType("varchar(60)");
 
             builder.Property(customer => customer.Email)
                 .IsRequired()
@@ -40,7 +40,7 @@ namespace Infrastructure.Data.Mapping
             builder.Property(customer => customer.Cellphone)
                 .IsRequired()
                 .HasColumnName("Cellphone")
-                .HasColumnType("text");
+                .HasColumnType("varchar(20)");
 
             builder.Property(customer => customer.DateOfBirth)
                 .IsRequired()
@@ -57,12 +57,12 @@ namespace Infrastructure.Data.Mapping
             builder.Property(customer => customer.Country)
                 .IsRequired()
                 .HasColumnName("Country")
-                .HasColumnType("text");
+                .HasColumnType("varchar(30)");
 
             builder.Property(customer => customer.City)
                 .IsRequired()
                 .HasColumnName("City")
-                .HasColumnType("text");
+                .HasColumnType("varchar(30)");
 
             builder.Property(customer => customer.PostalCode)
                 .IsRequired()
@@ -72,7 +72,7 @@ namespace Infrastructure.Data.Mapping
             builder.Property(customer => customer.Address)
                 .IsRequired()
                 .HasColumnName("Address")
-                .HasColumnType("text");
+                .HasColumnType("varchar(60)");
 
             builder.Property(customer => customer.Number)
                 .IsRequired()
