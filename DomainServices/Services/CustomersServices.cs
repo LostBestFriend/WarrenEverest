@@ -60,7 +60,7 @@ namespace DomainServices.Services
 
         public void Delete(int id)
         {
-            Customer? customertoRemove = _customers.FirstOrDefault(customer => customer.Id == id);
+            var customertoRemove = _customers.FirstOrDefault(customer => customer.Id == id);
             if (customertoRemove is null)
             {
                 throw new ArgumentNullException($"Cliente não encontrado para o id: {id}");
