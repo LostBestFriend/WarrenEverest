@@ -20,7 +20,6 @@ namespace DomainServices.Services
 
         public long Create(Customer model)
         {
-
             if (_customers.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
             {
                 throw new ArgumentException("O Cpf ou Email já está em uso");
