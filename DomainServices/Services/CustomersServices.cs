@@ -7,9 +7,7 @@ namespace DomainServices.Services
 {
     public class CustomersServices : ICustomersServices
     {
-        private readonly WarrenEverestContext _warrenEverestContext;
-
-            
+        private readonly WarrenEverestContext _warrenEverestContext;            
         private readonly DbSet<Customer> _customers;
 
         public CustomersServices(WarrenEverestContext warrenEverestContext)
