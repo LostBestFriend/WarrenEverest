@@ -10,7 +10,7 @@ namespace DomainServices.Services
         private readonly WarrenEverestContext _warrenEverestContext;
 
             
-        private DbSet<Customer> _customers;
+        private readonly DbSet<Customer> _customers;
 
         public CustomersServices(WarrenEverestContext warrenEverestContext)
         {
@@ -20,7 +20,6 @@ namespace DomainServices.Services
 
         public long Create(Customer model)
         {
-
             if (_customers.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
             {
                 throw new ArgumentException("O Cpf ou Email já está em uso");
