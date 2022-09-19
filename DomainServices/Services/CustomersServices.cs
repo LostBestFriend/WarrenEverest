@@ -10,7 +10,7 @@ namespace DomainServices.Services
         private readonly WarrenEverestContext _warrenEverestContext;
 
             
-        private DbSet<Customer> _customers;
+        private readonly DbSet<Customer> _customers;
 
         public CustomersServices(WarrenEverestContext warrenEverestContext)
         {
