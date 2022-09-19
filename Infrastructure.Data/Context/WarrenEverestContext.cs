@@ -1,6 +1,4 @@
-﻿using DomainModels.Models;
-using Infrastructure.Data.Mapping;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Data.Context

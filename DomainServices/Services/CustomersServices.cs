@@ -1,6 +1,7 @@
 ﻿using DomainModels.ExtensionMethods;
 using DomainModels.Models;
 using Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace DomainServices.Services
 {
@@ -15,11 +16,13 @@ namespace DomainServices.Services
 
         public long Create(Customer model)
         {
-            if (_warrenEverestContext.Set<Customer>().Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
+            var customers = _warrenEverestContext.Set<Customer>();
+
+            if (customers.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
             {
                 throw new ArgumentException("O Cpf ou Email já está em uso");
             }
-            _warrenEverestContext.Set<Customer>().Add(model);
+            customers.Add(model);
             _warrenEverestContext.SaveChanges();
             return model.Id;
         }
@@ -31,7 +34,7 @@ namespace DomainServices.Services
 
         public IEnumerable<Customer> GetAll()
         {
-            return _warrenEverestContext.Set<Customer>().ToList();
+            return _warrenEverestContext.Set<Customer>();
         }
 
         public Customer? GetByCpf(string cpf)
@@ -42,11 +45,12 @@ namespace DomainServices.Services
 
         public void Update(Customer model)
         {
-            if (!_warrenEverestContext.Set<Customer>().Any(customer => customer.Id == model.Id)) throw new ArgumentNullException($"Cliente não encontrado para o id: {model.Id}");
+            var customers = _warrenEverestContext.Set<Customer>();
+            if (!customers.Any(customer => customer.Id == model.Id)) throw new ArgumentNullException($"Cliente não encontrado para o id: {model.Id}");
 
-            if (_warrenEverestContext.Set<Customer>().Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
+            if (customers.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
             {
-                throw new ArgumentException("CPf ou Email informado já está em uso");
+                throw new ArgumentException("Cpf ou Email informado já está em uso");
             }
             _warrenEverestContext.Set<Customer>().Update(model);
             _warrenEverestContext.SaveChanges();

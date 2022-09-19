@@ -1,5 +1,4 @@
 ﻿using AppModels.Mapper;
-using DomainModels.Models;
 
 namespace AppServices.Services
 {
