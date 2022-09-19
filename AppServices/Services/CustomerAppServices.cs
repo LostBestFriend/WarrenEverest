@@ -18,7 +18,7 @@ namespace AppServices.Services
 
         public List<CustomerResultDto> GetAll()
         {
-            var result =_customerServices.GetAll();
+            var result = _customerServices.GetAll();
             return _mapper.Map<List<CustomerResultDto>>(result);
         }
 
@@ -31,7 +31,7 @@ namespace AppServices.Services
         public long Create(CustomerCreateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return _customerServices.Create(customerModel).Id;
+            return _customerServices.Create(customerModel);
         }
 
         public CustomerResultDto? GetByCpf(string cpf)
@@ -43,12 +43,13 @@ namespace AppServices.Services
         public void Update(long id, CustomerUpdateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
+            customerModel.Id = id;
             _customerServices.Update(customerModel);
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
-            return _customerServices.Delete(id);
+            _customerServices.Delete(id);
         }
     }
 }

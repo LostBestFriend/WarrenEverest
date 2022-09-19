@@ -4,11 +4,11 @@ namespace DomainServices.Services
 {
     public interface ICustomersServices
     {
-        List<Customer> GetAll();
+        IEnumerable<Customer> GetAll();
         Customer? GetById(int id);
-        Customer Create(Customer model);
+        long Create(Customer model);
         Customer? GetByCpf(string cpf);
         void Update(Customer model);
-        bool Delete(int id);
+        void Delete(int id);
     }
 }
