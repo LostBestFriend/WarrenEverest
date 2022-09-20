@@ -4,10 +4,10 @@ namespace AppServices.Services
 {
     public interface ICustomerAppServices
     {
-        Task<long> CreateAsync(CustomerCreate model);
+        Task<long> CreateAsync(CreateCustomer model);
         void Delete(int id);
-        IEnumerable<CustomerResult> GetAll();
-        Task<CustomerResult>? GetByIdAsync(long id);
-        void Update(long id, CustomerUpdate model);
+        IEnumerable<ResultCustomer> GetAll();
+        Task<ResultCustomer>? GetByIdAsync(long id);
+        void Update(long id, UpdateCustomer model);
     }
 }

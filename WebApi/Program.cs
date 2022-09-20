@@ -20,8 +20,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppServices, CustomerAppServices>();
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddScoped<IValidator<CustomerCreate>, CustomerCreateDtoValidator>();
-builder.Services.AddScoped<IValidator<CustomerUpdate>, CustomerUpdateDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateCustomer>, CustomerCreateDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateCustomer>, CustomerUpdateDtoValidator>();
 builder.Services.AddAutoMapper(Assembly.Load("AppServices"));
 builder.Services.AddUnitOfWork<WarrenEverestContext>();
 

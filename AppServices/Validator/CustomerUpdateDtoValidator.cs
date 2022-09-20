@@ -4,7 +4,7 @@ using Infrastructure.CrossCutting.ExtensionMethods;
 
 namespace AppServices.Validator
 {
-    public class CustomerUpdateDtoValidator : AbstractValidator<CustomerUpdate>
+    public class CustomerUpdateDtoValidator : AbstractValidator<UpdateCustomer>
     {
         public CustomerUpdateDtoValidator()
         {

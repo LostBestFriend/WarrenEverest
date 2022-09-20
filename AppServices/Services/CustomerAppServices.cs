@@ -16,25 +16,25 @@ namespace AppServices.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public IEnumerable<CustomerResult> GetAll()
+        public IEnumerable<ResultCustomer> GetAll()
         {
             var result = _customerServices.GetAll();
-            return _mapper.Map<IEnumerable<CustomerResult>>(result);
+            return _mapper.Map<IEnumerable<ResultCustomer>>(result);
         }
 
-        public async Task<CustomerResult>? GetByIdAsync(long id)
+        public async Task<ResultCustomer>? GetByIdAsync(long id)
         {
             var result = await _customerServices.GetByIdAsync(id).ConfigureAwait(false);
-            return _mapper.Map<CustomerResult>(result);
+            return _mapper.Map<ResultCustomer>(result);
         }
 
-        public async Task<long> CreateAsync(CustomerCreate model)
+        public async Task<long> CreateAsync(CreateCustomer model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
             return await _customerServices.CreateAsync(customerModel).ConfigureAwait(false);
         }
 
-        public void Update(long id, CustomerUpdate model)
+        public void Update(long id, UpdateCustomer model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
             customerModel.Id = id;

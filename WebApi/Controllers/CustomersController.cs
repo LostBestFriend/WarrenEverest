@@ -39,7 +39,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostAsync(CustomerCreate model)
+        public async Task<IActionResult> PostAsync(CreateCustomer model)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Update(long id, CustomerUpdate model)
+        public IActionResult Update(long id, UpdateCustomer model)
         {
             try
             {
