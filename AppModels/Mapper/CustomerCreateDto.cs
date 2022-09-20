@@ -1,6 +1,4 @@
-﻿using Infrastructure.CrossCutting.ExtensionMethods;
-
-namespace AppModels.Mapper
+﻿namespace AppModels.Mapper
 {
     public class CustomerCreateDto
     {
@@ -23,14 +21,14 @@ namespace AppModels.Mapper
             FullName = fullName;
             Email = email;
             EmailConfirmation = emailConfirmation;
-            Cpf = cpf.FormatString();
+            Cpf = cpf;
             Cellphone = cellphone;
             DateOfBirth = dateOfBirth;
             EmailSms = emailSms;
             Whatsapp = whatsapp;
             Country = country;
             City = city;
-            PostalCode = postalCode.FormatString();
+            PostalCode = postalCode;
             Address = address;
             Number = number;
         }

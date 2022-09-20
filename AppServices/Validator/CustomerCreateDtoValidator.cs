@@ -1,5 +1,6 @@
 ﻿using AppModels.Mapper;
 using FluentValidation;
+using Infrastructure.CrossCutting.ExtensionMethods;
 
 namespace AppServices.Validator
 {
@@ -46,6 +47,7 @@ namespace AppServices.Validator
             int sum = 0;
             int module;
             string finalDigits;
+            cpf = cpf.FormatString();
 
             if (cpf.Length != 11)
             {
