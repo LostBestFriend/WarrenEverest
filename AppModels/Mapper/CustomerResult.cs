@@ -1,6 +1,6 @@
 ﻿namespace AppModels.Mapper
 {
-    public class CustomerResultDto
+    public class CustomerResult
     {
         public long Id { get; set; }
         public string FullName { get; set; }
@@ -16,9 +16,9 @@
         public string Address { get; set; }
         public int Number { get; set; }
 
-        protected CustomerResultDto() { }
+        protected CustomerResult() { }
 
-        public CustomerResultDto(long id, string fullName, string email, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
+        public CustomerResult(long id, string fullName, string email, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
         {
             Id = id;
             FullName = fullName;

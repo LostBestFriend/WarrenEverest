@@ -8,9 +8,9 @@ namespace AppModels.Profiles
     {
         public CustomerProfile()
         {
-            CreateMap<CustomerCreateDto, Customer>();
-            CreateMap<Customer, CustomerResultDto>();
-            CreateMap<CustomerUpdateDto, Customer>();
+            CreateMap<CustomerCreate, Customer>();
+            CreateMap<Customer, CustomerResult>();
+            CreateMap<CustomerUpdate, Customer>();
         }
     }
 }
