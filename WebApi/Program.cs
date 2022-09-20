@@ -1,4 +1,3 @@
-global using Infrastructure.CrossCutting;
 using AppModels.Mapper;
 using AppServices.Services;
 using AppServices.Validator;
