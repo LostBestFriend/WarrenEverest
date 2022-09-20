@@ -1,7 +1,8 @@
+global using Infrastructure.CrossCutting;
 using AppModels.Mapper;
 using AppServices.Services;
 using AppServices.Validator;
-using DomainServices.Repositories;
+using DomainServices.Services;
 using EntityFrameworkCore.UnitOfWork.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -17,14 +18,12 @@ builder.Services.AddDbContext<WarrenEverestContext>(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<ICustomerAppServices, CustomerAppServices>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<CustomerCreateDto>, CustomerCreateDtoValidator>();
 builder.Services.AddScoped<IValidator<CustomerUpdateDto>, CustomerUpdateDtoValidator>();
 builder.Services.AddAutoMapper(Assembly.Load("AppServices"));
-builder.Services.AddScoped<DbContext, WarrenEverestContext>();
-builder.Services.AddUnitOfWork();
 builder.Services.AddUnitOfWork<WarrenEverestContext>();
 
 var app = builder.Build();

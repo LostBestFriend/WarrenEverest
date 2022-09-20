@@ -1,16 +1,16 @@
 ﻿using AppModels.Mapper;
 using AutoMapper;
 using DomainModels.Models;
-using DomainServices.Repositories;
+using DomainServices.Services;
 
 namespace AppServices.Services
 {
     public class CustomerAppServices : ICustomerAppServices
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerServices _customerRepository;
         private readonly IMapper _mapper;
 
-        public CustomerAppServices(ICustomerRepository repository, IMapper mapper)
+        public CustomerAppServices(ICustomerServices repository, IMapper mapper)
         {
             _customerRepository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -22,22 +22,16 @@ namespace AppServices.Services
             return _mapper.Map<IEnumerable<CustomerResultDto>>(result);
         }
 
-        public async Task<CustomerResultDto>? GetById(int id)
+        public async Task<CustomerResultDto>? GetByIdAsync(long id)
         {
-            var result = await _customerRepository.GetById(id);
+            var result = await _customerRepository.GetByIdAsync(id).ConfigureAwait(false);
             return _mapper.Map<CustomerResultDto>(result);
         }
 
-        public async Task<long> Create(CustomerCreateDto model)
+        public async Task<long> CreateAsync(CustomerCreateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return await _customerRepository.Create(customerModel);
-        }
-
-        public async Task<CustomerResultDto>? GetByCpf(string cpf)
-        {
-            var result = await _customerRepository.GetByCpf(cpf);
-            return _mapper.Map<CustomerResultDto>(result);
+            return await _customerRepository.CreateAsync(customerModel).ConfigureAwait(false);
         }
 
         public void Update(long id, CustomerUpdateDto model)

@@ -1,4 +1,4 @@
-﻿using DomainModels.ExtensionMethods;
+﻿using Infrastructure.CrossCutting.ExtensionMethods;
 
 namespace AppModels.Mapper
 {

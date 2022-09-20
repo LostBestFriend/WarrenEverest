@@ -1,6 +1,6 @@
-﻿namespace DomainModels.ExtensionMethods
+﻿namespace Infrastructure.CrossCutting.ExtensionMethods
 {
-    public static class MyExtensions
+    public static class StringExtensions
     {
         public static string FormatString(this string str)
         {
