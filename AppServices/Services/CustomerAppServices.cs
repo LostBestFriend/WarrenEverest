@@ -1,42 +1,42 @@
 ﻿using AppModels.Mapper;
 using AutoMapper;
 using DomainModels.Models;
-using DomainServices.Services;
+using DomainServices.Repositories;
 
 namespace AppServices.Services
 {
     public class CustomerAppServices : ICustomerAppServices
     {
-        private readonly ICustomersServices _customerServices;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public CustomerAppServices(ICustomersServices customerServices, IMapper mapper)
+        public CustomerAppServices(ICustomerRepository repository, IMapper mapper)
         {
-            _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
+            _customerRepository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public List<CustomerResultDto> GetAll()
+        public IEnumerable<CustomerResultDto> GetAll()
         {
-            var result = _customerServices.GetAll();
-            return _mapper.Map<List<CustomerResultDto>>(result);
+            var result = _customerRepository.GetAll();
+            return _mapper.Map<IEnumerable<CustomerResultDto>>(result);
         }
 
-        public CustomerResultDto? GetById(int id)
+        public async Task<CustomerResultDto>? GetById(int id)
         {
-            var result = _customerServices.GetById(id);
+            var result = await _customerRepository.GetById(id);
             return _mapper.Map<CustomerResultDto>(result);
         }
 
-        public long Create(CustomerCreateDto model)
+        public async Task<long> Create(CustomerCreateDto model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return _customerServices.Create(customerModel);
+            return await _customerRepository.Create(customerModel);
         }
 
-        public CustomerResultDto? GetByCpf(string cpf)
+        public async Task<CustomerResultDto>? GetByCpf(string cpf)
         {
-            var result = _customerServices.GetByCpf(cpf);
+            var result = await _customerRepository.GetByCpf(cpf);
             return _mapper.Map<CustomerResultDto>(result);
         }
 
@@ -44,12 +44,12 @@ namespace AppServices.Services
         {
             Customer customerModel = _mapper.Map<Customer>(model);
             customerModel.Id = id;
-            _customerServices.Update(customerModel);
+            _customerRepository.Update(customerModel);
         }
 
         public void Delete(int id)
         {
-            _customerServices.Delete(id);
+            _customerRepository.Delete(id);
         }
     }
 }

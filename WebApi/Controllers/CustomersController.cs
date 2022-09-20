@@ -18,15 +18,16 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_repository.GetAll());
+            var result = _repository.GetAll();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var customer = _repository.GetById(id);
+            var customer = await _repository.GetById(id);
             if (customer is null)
             {
                 return NotFound($"Usuário não encontrado para o id: {id}");
@@ -38,11 +39,11 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CustomerCreateDto model)
+        public async Task<IActionResult> Post(CustomerCreateDto model)
         {
             try
             {
-                long id = _repository.Create(model);
+                long id = await _repository.Create(model);
                 return CreatedAtAction(nameof(GetById), new { id = id }, id);
             }
             catch (ArgumentException ex)

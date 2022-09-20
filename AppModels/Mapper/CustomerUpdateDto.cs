@@ -1,4 +1,6 @@
-﻿namespace AppModels.Mapper
+﻿using DomainModels.ExtensionMethods;
+
+namespace AppModels.Mapper
 {
     public class CustomerUpdateDto
     {
@@ -19,14 +21,14 @@
         {
             FullName = fullName;
             Email = email;
-            Cpf = cpf;
+            Cpf = cpf.FormatString();
             Cellphone = cellphone;
             DateOfBirth = dateOfBirth;
             EmailSms = emailSms;
             Whatsapp = whatsapp;
             Country = country;
             City = city;
-            PostalCode = postalCode;
+            PostalCode = postalCode.FormatString();
             Address = address;
             Number = number;
         }
