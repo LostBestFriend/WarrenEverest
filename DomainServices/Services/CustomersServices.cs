@@ -34,7 +34,7 @@ namespace DomainServices.Services
 
         public async Task<Customer>? GetByIdAsync(long id)
         {
-            var repository = _unitOfWork.Repository<Customer>();
+            var repository = _repositoryFactory.Repository<Customer>();
 
             var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id);
 
@@ -44,7 +44,7 @@ namespace DomainServices.Services
 
         public IEnumerable<Customer> GetAll()
         {
-            var repository = _unitOfWork.Repository<Customer>();
+            var repository = _repositoryFactory.Repository<Customer>();
 
             var query = repository.MultipleResultQuery();
 
@@ -82,7 +82,6 @@ namespace DomainServices.Services
             }
 
             repository.Remove(customertoRemove => customertoRemove.Id == id);
-            _unitOfWork.SaveChanges();
         }
     }
 }
