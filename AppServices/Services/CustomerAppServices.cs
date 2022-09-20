@@ -7,43 +7,43 @@ namespace AppServices.Services
 {
     public class CustomerAppServices : ICustomerAppServices
     {
-        private readonly ICustomerServices _customerRepository;
+        private readonly ICustomerServices _customerServices;
         private readonly IMapper _mapper;
 
-        public CustomerAppServices(ICustomerServices repository, IMapper mapper)
+        public CustomerAppServices(ICustomerServices services, IMapper mapper)
         {
-            _customerRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _customerServices = services ?? throw new ArgumentNullException(nameof(services));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public IEnumerable<CustomerResult> GetAll()
         {
-            var result = _customerRepository.GetAll();
+            var result = _customerServices.GetAll();
             return _mapper.Map<IEnumerable<CustomerResult>>(result);
         }
 
         public async Task<CustomerResult>? GetByIdAsync(long id)
         {
-            var result = await _customerRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var result = await _customerServices.GetByIdAsync(id).ConfigureAwait(false);
             return _mapper.Map<CustomerResult>(result);
         }
 
         public async Task<long> CreateAsync(CustomerCreate model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return await _customerRepository.CreateAsync(customerModel).ConfigureAwait(false);
+            return await _customerServices.CreateAsync(customerModel).ConfigureAwait(false);
         }
 
         public void Update(long id, CustomerUpdate model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
             customerModel.Id = id;
-            _customerRepository.Update(customerModel);
+            _customerServices.Update(customerModel);
         }
 
         public void Delete(int id)
         {
-            _customerRepository.Delete(id);
+            _customerServices.Delete(id);
         }
     }
 }
