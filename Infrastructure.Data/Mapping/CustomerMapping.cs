@@ -77,6 +77,13 @@ namespace Infrastructure.Data.Mapping
             builder.Property(customer => customer.Number)
                 .IsRequired()
                 .HasColumnName("number");
+
+            builder.HasOne(customer => customer.BankInfo)
+                   .WithOne(bankInfo => bankInfo.Customer)
+                   .HasForeignKey<CustomerBankInfo>(bankInfo => bankInfo.CustomerId);
+
+            builder.HasMany(customer => customer.Portfolios)
+                   .WithOne(portfolio => portfolio.Customer);
         }
     }
 }

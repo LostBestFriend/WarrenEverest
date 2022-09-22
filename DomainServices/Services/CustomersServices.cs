@@ -1,4 +1,5 @@
 ﻿using DomainModels.Models;
+using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data.Context;
 
@@ -27,8 +28,7 @@ namespace DomainServices.Services
                 throw new ArgumentException("O Email informado já está em uso");
             }
             await repository.AddAsync(model).ConfigureAwait(false);
-            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
-
+            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);     
             return model.Id;
         }
 

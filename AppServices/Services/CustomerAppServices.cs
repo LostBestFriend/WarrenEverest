@@ -1,7 +1,8 @@
 ﻿using AppModels.Mapper;
+using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
-using DomainServices.Services;
+using DomainServices.Interfaces;
 
 namespace AppServices.Services
 {
@@ -9,11 +10,13 @@ namespace AppServices.Services
     {
         private readonly ICustomerServices _customerServices;
         private readonly IMapper _mapper;
+        private readonly ICustomerBankInfoAppServices _customerBankInfoAppServices;
 
-        public CustomerAppServices(ICustomerServices services, IMapper mapper)
+        public CustomerAppServices(ICustomerServices services, IMapper mapper, ICustomerBankInfoAppServices bankInfoAppServices)
         {
             _customerServices = services ?? throw new ArgumentNullException(nameof(services));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _customerBankInfoAppServices = bankInfoAppServices ?? throw new ArgumentNullException(nameof(bankInfoAppServices));
         }
 
         public IEnumerable<CustomerResult> GetAll()
@@ -31,7 +34,9 @@ namespace AppServices.Services
         public async Task<long> CreateAsync(CreateCustomer model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return await _customerServices.CreateAsync(customerModel).ConfigureAwait(false);
+            long customerId = await _customerServices.CreateAsync(customerModel).ConfigureAwait(false);
+            _customerBankInfoAppServices.Create(customerId);
+            return customerId;
         }
 
         public void Update(long id, UpdateCustomer model)
@@ -41,7 +46,7 @@ namespace AppServices.Services
             _customerServices.Update(customerModel);
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             _customerServices.Delete(id);
         }

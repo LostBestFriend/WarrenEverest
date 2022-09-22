@@ -16,6 +16,8 @@ namespace DomainModels.Models
         public string PostalCode { get; set; }
         public string Address { get; set; }
         public int Number { get; set; }
+        public CustomerBankInfo? BankInfo { get; set; }
+        public ICollection<Portfolio> Portfolios { get; set; } = Array.Empty<Portfolio>();
 
         public Customer(string fullName, string email, string cpf, string cellphone, DateTime dateOfBirth, bool emailSms, bool whatsapp, string country, string city, string postalCode, string address, int number)
         {

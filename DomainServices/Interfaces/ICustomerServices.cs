@@ -1,6 +1,6 @@
 ﻿using DomainModels.Models;
 
-namespace DomainServices.Services
+namespace DomainServices.Interfaces
 {
     public interface ICustomerServices
     {

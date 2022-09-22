@@ -1,5 +1,5 @@
 ﻿using AppModels.Mapper;
-using AppServices.Services;
+using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -85,7 +85,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(long id)
         {
             try
             {
