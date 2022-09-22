@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<WarrenEverestContext>(
-    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), contextLifetime: ServiceLifetime.Transient);
 builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,7 +31,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<CreateCustomer>, CustomerCreateDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateCustomer>, CustomerUpdateDtoValidator>();
 builder.Services.AddAutoMapper(Assembly.Load("AppServices"));
-builder.Services.AddUnitOfWork<WarrenEverestContext>();
+builder.Services.AddUnitOfWork<WarrenEverestContext>(ServiceLifetime.Transient);
 
 var app = builder.Build();
 

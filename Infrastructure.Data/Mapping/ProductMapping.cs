@@ -12,6 +12,10 @@ namespace Infrastructure.Data.Mapping
 
             builder.HasKey(product => product.Id);
 
+            builder.Property(product => product.Id)
+                   .ValueGeneratedOnAdd()
+                   .HasColumnName("id");
+
             builder.HasIndex(product => product.Symbol);
 
             builder.HasIndex(product => product.Type);

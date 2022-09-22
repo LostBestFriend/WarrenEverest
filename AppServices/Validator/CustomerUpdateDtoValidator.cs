@@ -48,7 +48,6 @@ namespace AppServices.Validator
             string finalDigits;
             cpf = cpf.FormatString();
 
-
             if (cpf.Length != 11) return false;            
 
             if (cpf.All(x =>x == cpf.First())) return false;

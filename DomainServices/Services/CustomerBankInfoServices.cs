@@ -28,16 +28,16 @@ namespace DomainServices.Services
         {
             var repository = _repositoryFactory.Repository<CustomerBankInfo>();
 
-            var query = repository.SingleResultQuery().AndFilter(bankinfo => bankinfo.CustomerId == customerId);
-
-            var bankInfo = repository.FirstOrDefault(query);
-
-            if (bankInfo is null)
+            if(!repository.Any(bankinfo => bankinfo.CustomerId == customerId))
             {
                 throw new ArgumentNullException($"Cliente não encontrato para o id {customerId}");
             }
 
-            return bankInfo.AccountBalance;
+            var query = repository.SingleResultQuery().AndFilter(bankinfo => bankinfo.CustomerId == customerId).Select(bankinfo => bankinfo.AccountBalance);
+
+            var accountBalance = repository.FirstOrDefault(query);
+
+            return accountBalance;
         }
 
         public void Deposit(long customerId, decimal amount)

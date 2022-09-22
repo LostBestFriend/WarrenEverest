@@ -12,6 +12,10 @@ namespace Infrastructure.Data.Mapping
 
             builder.HasKey(portfolio => portfolio.Id);
 
+            builder.Property(potfolio => potfolio.Id)
+                   .ValueGeneratedOnAdd()
+                   .HasColumnName("id");
+
             builder.Property(portfolio => portfolio.Name)
                    .IsRequired()
                    .HasColumnName("Name")

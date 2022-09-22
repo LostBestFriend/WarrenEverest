@@ -7,8 +7,8 @@
         public DateTime ExpirationAt { get; set; }
         public int DaysToExpire { get; set; }
         public ProductType Type { get; set; }
-        public ICollection<Portfolio> Porfolios { get; set; } = new List<Portfolio>();
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Portfolio> Porfolios { get; set; } = Array.Empty<Portfolio>();
+        public ICollection<Order> Orders { get; set; } =  Array.Empty<Order>();
 
         public Product(string symbol, DateTime issuanceAt, DateTime expirationAt, int daysToExpire, ProductType type)
         {

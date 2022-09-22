@@ -16,6 +16,7 @@ namespace DomainServices.Services
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _repositoryFactory = repository ?? (IRepositoryFactory)_unitOfWork;
         }
+
         public async Task<long> CreateAsync(Order model)
         {
             var repository = _unitOfWork.Repository<Order>();
@@ -63,6 +64,5 @@ namespace DomainServices.Services
 
             repository.Remove(order => order.Id == id);
         }
-
     }
 }

@@ -20,7 +20,7 @@ namespace AppServices.Services
         public async Task<long> CreateAsync(CreatePortfolio model)
         {
             Portfolio portfolio = _mapper.Map<Portfolio>(model);
-            return await _portfolioServices.CreateAsync(portfolio);
+            return await _portfolioServices.CreateAsync(portfolio).ConfigureAwait(false);
         }
 
         public IEnumerable<Portfolio> GetAll()

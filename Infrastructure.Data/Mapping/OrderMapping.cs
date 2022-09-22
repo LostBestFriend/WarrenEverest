@@ -12,6 +12,10 @@ namespace Infrastructure.Data.Mapping
 
             builder.HasKey(order => order.Id);
 
+            builder.Property(order => order.Id)
+                   .ValueGeneratedOnAdd()
+                   .HasColumnName("id");
+
             builder.HasIndex(order => order.LiquidateAt);
 
             builder.Property(order => order.Quotes)

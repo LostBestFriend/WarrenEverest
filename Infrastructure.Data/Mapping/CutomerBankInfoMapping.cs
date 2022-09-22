@@ -13,7 +13,7 @@ namespace Infrastructure.Data.Mapping
             builder.HasKey(bankInfo => bankInfo.Id);
 
             builder.Property(bankInfo => bankInfo.Id)
-                   .IsRequired()
+                   .ValueGeneratedOnAdd()
                    .HasColumnName("id");
 
             builder.Property(bankinfo => bankinfo.AccountBalance)
