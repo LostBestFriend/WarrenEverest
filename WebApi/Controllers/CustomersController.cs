@@ -1,5 +1,5 @@
 ﻿using AppModels.Mapper;
-using AppServices.Services;
+using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -18,15 +18,16 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_repository.GetAll());
+            var result = _repository.GetAll();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetByIdAsync(long id)
         {
-            var customer = _repository.GetById(id);
+            var customer = await _repository.GetByIdAsync(id).ConfigureAwait(false);
             if (customer is null)
             {
                 return NotFound($"Usuário não encontrado para o id: {id}");
@@ -38,12 +39,12 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CustomerCreateDto model)
+        public async Task<IActionResult> PostAsync(CreateCustomer model)
         {
             try
             {
-                long id = _repository.Create(model);
-                return CreatedAtAction(nameof(GetById), new { id = id }, id);
+                long id = await _repository.CreateAsync(model).ConfigureAwait(false);
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = id }, id);
             }
             catch (ArgumentException ex)
             {
@@ -59,7 +60,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Update(long id, CustomerUpdateDto model)
+        public IActionResult Update(long id, UpdateCustomer model)
         {
             try
             {
@@ -84,7 +85,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(long id)
         {
             try
             {

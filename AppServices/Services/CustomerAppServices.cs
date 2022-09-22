@@ -1,53 +1,52 @@
 ﻿using AppModels.Mapper;
+using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
-using DomainServices.Services;
+using DomainServices.Interfaces;
 
 namespace AppServices.Services
 {
     public class CustomerAppServices : ICustomerAppServices
     {
-        private readonly ICustomersServices _customerServices;
+        private readonly ICustomerServices _customerServices;
         private readonly IMapper _mapper;
+        private readonly ICustomerBankInfoAppServices _customerBankInfoAppServices;
 
-        public CustomerAppServices(ICustomersServices customerServices, IMapper mapper)
+        public CustomerAppServices(ICustomerServices services, IMapper mapper, ICustomerBankInfoAppServices bankInfoAppServices)
         {
-            _customerServices = customerServices ?? throw new ArgumentNullException(nameof(customerServices));
+            _customerServices = services ?? throw new ArgumentNullException(nameof(services));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _customerBankInfoAppServices = bankInfoAppServices ?? throw new ArgumentNullException(nameof(bankInfoAppServices));
         }
 
-        public List<CustomerResultDto> GetAll()
+        public IEnumerable<CustomerResult> GetAll()
         {
             var result = _customerServices.GetAll();
-            return _mapper.Map<List<CustomerResultDto>>(result);
+            return _mapper.Map<IEnumerable<CustomerResult>>(result);
         }
 
-        public CustomerResultDto? GetById(int id)
+        public async Task<CustomerResult>? GetByIdAsync(long id)
         {
-            var result = _customerServices.GetById(id);
-            return _mapper.Map<CustomerResultDto>(result);
+            var result = await _customerServices.GetByIdAsync(id).ConfigureAwait(false);
+            return _mapper.Map<CustomerResult>(result);
         }
 
-        public long Create(CustomerCreateDto model)
+        public async Task<long> CreateAsync(CreateCustomer model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
-            return _customerServices.Create(customerModel);
+            long customerId = await _customerServices.CreateAsync(customerModel).ConfigureAwait(false);
+            _customerBankInfoAppServices.Create(customerId);
+            return customerId;
         }
 
-        public CustomerResultDto? GetByCpf(string cpf)
-        {
-            var result = _customerServices.GetByCpf(cpf);
-            return _mapper.Map<CustomerResultDto>(result);
-        }
-
-        public void Update(long id, CustomerUpdateDto model)
+        public void Update(long id, UpdateCustomer model)
         {
             Customer customerModel = _mapper.Map<Customer>(model);
             customerModel.Id = id;
             _customerServices.Update(customerModel);
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             _customerServices.Delete(id);
         }

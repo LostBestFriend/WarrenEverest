@@ -1,69 +1,87 @@
-﻿using DomainModels.ExtensionMethods;
-using DomainModels.Models;
+﻿using DomainModels.Models;
+using DomainServices.Interfaces;
+using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace DomainServices.Services
 {
-    public class CustomersServices : ICustomersServices
+    public class CustomerServices : ICustomerServices
     {
-        private readonly WarrenEverestContext _warrenEverestContext;            
-        private readonly DbSet<Customer> _customers;
+        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomersServices(WarrenEverestContext warrenEverestContext)
+        public CustomerServices(IUnitOfWork<WarrenEverestContext> unitOfWork, IRepositoryFactory<WarrenEverestContext> repository)
         {
-            _warrenEverestContext = warrenEverestContext ?? throw new ArgumentNullException(nameof(warrenEverestContext));
-            _customers = warrenEverestContext.Set<Customer>();
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _repositoryFactory = repository ?? (IRepositoryFactory)_unitOfWork;
         }
 
-        public long Create(Customer model)
+        public async Task<long> CreateAsync(Customer model)
         {
-            if (_customers.Any(customer => customer.Cpf == model.Cpf || customer.Email == model.Email))
+            var repository = _unitOfWork.Repository<Customer>();
+            if (repository.Any(customer => customer.Cpf == model.Cpf))
             {
-                throw new ArgumentException("O Cpf ou Email já está em uso");
+                throw new ArgumentException("O Cpf informado já está em uso");
             }
-            _customers.Add(model);
-            _warrenEverestContext.SaveChanges();
+            if (repository.Any(customer => customer.Email == model.Email))
+            {
+                throw new ArgumentException("O Email informado já está em uso");
+            }
+            await repository.AddAsync(model).ConfigureAwait(false);
+            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);     
             return model.Id;
         }
 
-        public Customer? GetById(int id)
+        public async Task<Customer>? GetByIdAsync(long id)
         {
-            return _customers.FirstOrDefault(customer => customer.Id == id);
+            var repository = _repositoryFactory.Repository<Customer>();
+
+            var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id);
+
+            var customer = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false);
+            return customer;
         }
 
         public IEnumerable<Customer> GetAll()
         {
-            return _customers;
-        }
+            var repository = _repositoryFactory.Repository<Customer>();
 
-        public Customer? GetByCpf(string cpf)
-        {
-            cpf.FormatString();
-            return _customers.FirstOrDefault(customer => customer.Cpf == cpf);
+            var query = repository.MultipleResultQuery();
+
+            return repository.Search(query);
         }
 
         public void Update(Customer model)
         {
-            if (!_customers.Any(customer => customer.Id == model.Id)) throw new ArgumentNullException($"Cliente não encontrado para o id: {model.Id}");
+            var repository = _unitOfWork.Repository<Customer>();
 
-            if (_customers.Any(customer => (customer.Cpf == model.Cpf || customer.Email == model.Email) && customer.Id != model.Id))
+            if (!repository.Any(customer => customer.Id == model.Id))
             {
-                throw new ArgumentException("Cpf ou Email informado já está em uso");
+                throw new ArgumentNullException($"Cliente não encontrado para o id: {model.Id}");
             }
-            _customers.Update(model);
-            _warrenEverestContext.SaveChanges();
+            if (repository.Any(customer => customer.Cpf == model.Cpf))
+            {
+                throw new ArgumentException("O Cpf informado já está em uso");
+            }
+            if (repository.Any(customer => customer.Email == model.Email))
+            {
+                throw new ArgumentException("O Email informado já está em uso");
+            }
+
+            repository.Update(model);
+            _unitOfWork.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
-            var customertoRemove = _customers.FirstOrDefault(customer => customer.Id == id);
-            if (customertoRemove is null)
+            var repository = _unitOfWork.Repository<Customer>();
+
+            if (!repository.Any(customr => customr.Id == id))
             {
                 throw new ArgumentNullException($"Cliente não encontrado para o id: {id}");
             }
-            _customers.Remove(customertoRemove).State = EntityState.Deleted;
-            _warrenEverestContext.SaveChanges();
+
+            repository.Remove(customertoRemove => customertoRemove.Id == id);
         }
     }
 }
