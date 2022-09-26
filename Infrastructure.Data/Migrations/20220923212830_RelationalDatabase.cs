@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Data.Migrations
 {
-    public partial class AddingRelationshipDatabase : Migration
+    public partial class RelationalDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,7 +35,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Portfolios",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -46,7 +46,7 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Portfolios", x => x.Id);
+                    table.PrimaryKey("PK_Portfolios", x => x.id);
                     table.ForeignKey(
                         name: "FK_Portfolios_Customers_CustomerId",
                         column: x => x.CustomerId,
@@ -60,10 +60,11 @@ namespace Infrastructure.Data.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Symbol = table.Column<string>(type: "varchar(15)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    UnitPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     IssuanceAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ExpirationAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DaysToExpire = table.Column<int>(type: "int", nullable: false),
@@ -71,7 +72,7 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -79,7 +80,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Quotes = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
@@ -91,43 +92,43 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.id);
                     table.ForeignKey(
                         name: "FK_Orders_Portfolios_PorfolioId",
                         column: x => x.PorfolioId,
                         principalTable: "Portfolios",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "PortfolioProduct",
+                name: "PortfolioProducts",
                 columns: table => new
                 {
-                    PorfoliosId = table.Column<long>(type: "bigint", nullable: false),
-                    ProductsId = table.Column<long>(type: "bigint", nullable: false)
+                    PortfolioId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PortfolioProduct", x => new { x.PorfoliosId, x.ProductsId });
+                    table.PrimaryKey("PK_PortfolioProducts", x => new { x.PortfolioId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_PortfolioProduct_Portfolios_PorfoliosId",
-                        column: x => x.PorfoliosId,
+                        name: "FK_PortfolioProducts_Portfolios_PortfolioId",
+                        column: x => x.PortfolioId,
                         principalTable: "Portfolios",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PortfolioProduct_Products_ProductsId",
-                        column: x => x.ProductsId,
+                        name: "FK_PortfolioProducts_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -135,8 +136,12 @@ namespace Infrastructure.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerBankInfos_CustomerId",
                 table: "CustomerBankInfos",
-                column: "CustomerId",
-                unique: true);
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_LiquidateAt",
+                table: "Orders",
+                column: "LiquidateAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_PorfolioId",
@@ -149,9 +154,9 @@ namespace Infrastructure.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PortfolioProduct_ProductsId",
-                table: "PortfolioProduct",
-                column: "ProductsId");
+                name: "IX_PortfolioProducts_ProductId",
+                table: "PortfolioProducts",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Portfolios_CustomerId",
@@ -159,14 +164,14 @@ namespace Infrastructure.Data.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Portfolios_Name",
-                table: "Portfolios",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_Symbol",
                 table: "Products",
                 column: "Symbol");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_Type",
+                table: "Products",
+                column: "Type");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -178,7 +183,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "PortfolioProduct");
+                name: "PortfolioProducts");
 
             migrationBuilder.DropTable(
                 name: "Portfolios");

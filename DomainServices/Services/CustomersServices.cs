@@ -32,13 +32,16 @@ namespace DomainServices.Services
             return model.Id;
         }
 
-        public async Task<Customer>? GetByIdAsync(long id)
+        public async Task<Customer> GetByIdAsync(long id)
         {
             var repository = _repositoryFactory.Repository<Customer>();
 
             var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id);
 
             var customer = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false);
+
+            if (customer is null) throw new ArgumentNullException($"Nenhum cliente encontrado para o Id: {id}");
+
             return customer;
         }
 

@@ -1,9 +1,8 @@
-﻿
-using AppModels.Enums;
+﻿using AppModels.Enums;
 
-namespace AppModels.Mapper
+namespace AppModels.Mapper.Order
 {
-    public class CreateOrder
+    public class UpdateOrder
     {
         public int Quotes { get; set; }
         public decimal UnitPrice { get; set; }

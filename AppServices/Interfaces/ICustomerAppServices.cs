@@ -1,4 +1,4 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Customer;
 
 namespace AppServices.Interfaces
 {
@@ -6,7 +6,7 @@ namespace AppServices.Interfaces
     {
         Task<long> CreateAsync(CreateCustomer model);
         IEnumerable<CustomerResult> GetAll();
-        Task<CustomerResult>? GetByIdAsync(long id);
+        Task<CustomerResult> GetByIdAsync(long id);
         void Update(long id, UpdateCustomer model);
         void Delete(long id);
     }

@@ -1,4 +1,4 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Product;
 using AutoMapper;
 using DomainModels.Models;
 
@@ -8,6 +8,7 @@ namespace AppServices.Profiles
     {
         public ProductProfile()
         {
+            CreateMap<Product, ProductResult>();
             CreateMap<CreateProduct, Product>();
             CreateMap<UpdateProduct, Product>();
         }

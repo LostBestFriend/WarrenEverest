@@ -1,9 +1,10 @@
 ﻿using AppModels.Enums;
 
-namespace AppModels.Mapper
+namespace AppModels.Mapper.Order
 {
-    public class UpdateOrder
+    public class OrderResult
     {
+        public long Id { get; set; }
         public int Quotes { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal NetValue { get; set; }
