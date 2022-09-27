@@ -1,8 +1,8 @@
 ﻿using DomainModels.Models;
 using DomainServices.Interfaces;
-using EntityFrameworkCore.UnitOfWork;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace DomainServices.Services
 {
@@ -34,15 +34,28 @@ namespace DomainServices.Services
             return repository.Search(query);
         }
 
-        public async Task<Order>? GetByIdAsync(long id)
+        public async Task<Order> GetByIdAsync(long id)
         {
             var repository = _repositoryFactory.Repository<Order>();
 
-            var query = repository.SingleResultQuery().AndFilter(order => order.Id == id);
+            var query = repository.SingleResultQuery()
+                                   .AndFilter(order => order.Id == id)
+                                   .Include(source => source.Include(order => order.Product).Include(order => order.Portfolio));
 
             var order = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false);
 
             return order;
+        }
+
+        public IList<Order> GetOrdersToExecute()
+        {
+            var repository = _unitOfWork.Repository<Order>();
+
+            var query = repository.MultipleResultQuery().AndFilter(order => order.LiquidateAt.Date == DateTime.Now.Date);
+
+            var orders = repository.Search(query);
+
+            return orders;
         }
 
         public void Update(Order model)
@@ -63,6 +76,36 @@ namespace DomainServices.Services
             }
 
             repository.Remove(order => order.Id == id);
+        }
+
+        public int GetAvailableQuotes(long portfolioId, long productId)
+        {
+            var repository = _repositoryFactory.Repository<Order>();
+
+            var query = repository.MultipleResultQuery().AndFilter(order => order.ProductId == productId);
+
+            var allOrders = repository.Search(query);
+
+            if(allOrders.Count() == 0)
+            {
+                throw new ArgumentNullException($"Nenhuma cota disponível para o produto de Id: {productId} na carteira de Id {portfolioId}");
+            }
+
+            int availableQuotes = 0;
+
+            foreach(var order in allOrders)
+            {
+                if(order.Direction == OrderDirection.Buy)
+                {
+                    availableQuotes += order.Quotes;
+                }
+                else
+                {
+                    availableQuotes -= order.Quotes;
+                }
+            }
+
+            return availableQuotes;
         }
     }
 }

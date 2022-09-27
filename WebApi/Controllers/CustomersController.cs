@@ -1,4 +1,4 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Customer;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,23 +16,40 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetAll()
         {
-            var result = _repository.GetAll();
-            return Ok(result);
+            try
+            {
+                var portolios = _repository.GetAll();
+                return Ok(portolios);
+            }
+            catch (Exception exception)
+            {
+                return Problem(exception.Message);
+            }
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
-            var customer = await _repository.GetByIdAsync(id).ConfigureAwait(false);
-            if (customer is null)
+            try
             {
-                return NotFound($"Usuário não encontrado para o id: {id}");
+                var customer = await _repository.GetByIdAsync(id).ConfigureAwait(false);
+                return Ok(customer);
             }
-            return Ok(customer);
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return Problem(exception.Message);
+            }
         }
 
         [HttpPost]
@@ -58,6 +75,7 @@ namespace WebApi.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Update(long id, UpdateCustomer model)

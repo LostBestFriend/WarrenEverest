@@ -6,7 +6,10 @@ namespace DomainServices.Interfaces
     {
         Task<long> CreateAsync(Portfolio model);
         IEnumerable<Portfolio> GetAll();
-        void Invest(decimal amount, long productId);
-        void Withdraw(decimal amount, long productId);
+        Task<Portfolio> GetByIdAsync(long id);
+        public decimal GetBalance(long portfolioId);
+        void Deposit(decimal amount, long portfolioId);
+        void Withdraw(decimal amount, long portfolioId);
+        void Delete(long portfolioId);
     }
 }

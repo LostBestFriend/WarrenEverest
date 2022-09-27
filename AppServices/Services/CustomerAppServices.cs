@@ -1,4 +1,4 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Customer;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;

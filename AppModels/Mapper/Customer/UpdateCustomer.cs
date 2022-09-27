@@ -1,4 +1,4 @@
-﻿namespace AppModels.Mapper
+﻿namespace AppModels.Mapper.Customer
 {
     public class UpdateCustomer
     {

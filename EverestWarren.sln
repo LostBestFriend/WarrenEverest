@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppModels", "AppModels\AppM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Data", "Infrastructure.Data\Infrastructure.Data.csproj", "{E1A12179-7B62-4FAE-9D72-29739153AB89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.CrossCutting", "Infrastructure.CrossCutting\Infrastructure.CrossCutting.csproj", "{0314FBAD-A8BE-4503-A00F-210168D18D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.CrossCutting", "Infrastructure.CrossCutting\Infrastructure.CrossCutting.csproj", "{0314FBAD-A8BE-4503-A00F-210168D18D39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostedServices", "HostedServices\HostedServices.csproj", "{72A12EBC-6AB4-4A39-B8DA-1C9DF62012A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{0314FBAD-A8BE-4503-A00F-210168D18D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0314FBAD-A8BE-4503-A00F-210168D18D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0314FBAD-A8BE-4503-A00F-210168D18D39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A12EBC-6AB4-4A39-B8DA-1C9DF62012A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A12EBC-6AB4-4A39-B8DA-1C9DF62012A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A12EBC-6AB4-4A39-B8DA-1C9DF62012A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A12EBC-6AB4-4A39-B8DA-1C9DF62012A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

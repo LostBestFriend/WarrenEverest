@@ -1,10 +1,11 @@
 ﻿using AppModels.Enums;
 
-namespace AppModels.Mapper
+namespace AppModels.Mapper.Product
 {
-    public class UpdateProduct
+    public class CreateProduct
     {
         public string Symbol { get; set; }
+        public decimal UnitPrice { get; set; }
         public DateTime IssuanceAt { get; set; }
         public DateTime ExpirationAt { get; set; }
         public int DaysToExpire { get; set; }

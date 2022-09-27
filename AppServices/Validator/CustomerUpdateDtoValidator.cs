@@ -1,4 +1,4 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Customer;
 using FluentValidation;
 using Infrastructure.CrossCutting.ExtensionMethods;
 

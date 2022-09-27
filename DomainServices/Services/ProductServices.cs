@@ -2,6 +2,7 @@
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace DomainServices.Services
 {
@@ -25,21 +26,25 @@ namespace DomainServices.Services
             return model.Id;
         }
 
-        public async Task<Product>? GetByIdAsync(long id)
+        public async Task<Product> GetByIdAsync(long id)
         {
             var repository = _repositoryFactory.Repository<Product>();
 
-            var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
+            var query = repository.SingleResultQuery().AndFilter(product => product.Id == id).Include(source => source.Include(product => product.Orders));
 
             var product = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false);
+
+            if (product is null) throw new ArgumentNullException($"Produto não encontrado para o Id: {id}");
+
             return product;
         }
+
 
         public IEnumerable<Product> GetAll()
         {
             var repository = _repositoryFactory.Repository<Product>();
 
-            var query = repository.MultipleResultQuery();
+            var query = repository.MultipleResultQuery().Include(source => source.Include(product => product.Orders));
 
             return repository.Search(query);
         }
@@ -61,6 +66,15 @@ namespace DomainServices.Services
                 throw new ArgumentNullException($"Produto não encontrado para o id: {id}");
             }
             repository.Remove(product => product.Id == id);
+        }
+
+        public void AddPortfolio(long productId, long portfolioId)
+        {
+            var repository = _unitOfWork.Repository<Product>();
+
+            var query = repository.SingleResultQuery().AndFilter(product => product.Id == productId);
+
+            var product = repository.SingleOrDefault(query);
         }
     }
 }

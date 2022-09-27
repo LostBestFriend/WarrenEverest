@@ -1,4 +1,4 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Order;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
@@ -23,14 +23,29 @@ namespace AppServices.Services
             return _orderServices.CreateAsync(order);
         }
 
-        public IEnumerable<Order> GetAll()
+        public IEnumerable<OrderResult> GetAll()
         {
-            return _orderServices.GetAll();
+            var result = _orderServices.GetAll();
+            return _mapper.Map<IList<OrderResult>>(result);
         }
 
-        public Task<Order>? GetByIdAsync(long id)
+        public async Task<OrderResult> GetByIdAsync(long id)
         {
-            return _orderServices.GetByIdAsync(id);
+            var result = await _orderServices.GetByIdAsync(id);
+            return _mapper.Map<OrderResult>(result);
+        }
+
+        public int GetAvailableQuotes(long portfolioId, long productId)
+        {
+            return _orderServices.GetAvailableQuotes(portfolioId, productId);
+        }
+
+        public IEnumerable<OrderResult> GetOrdersToExecute()
+        {
+            var orders = _orderServices.GetOrdersToExecute();
+
+            return _mapper.Map<IEnumerable<OrderResult>>(orders);
+            
         }
 
         public void Update(long id, UpdateOrder model)

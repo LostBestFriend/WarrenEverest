@@ -1,7 +1,5 @@
-﻿using AppModels.Mapper;
+﻿using AppModels.Mapper.Product;
 using AppServices.Interfaces;
-using DomainModels.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -18,32 +16,62 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetAll()
         {
-            var result = _repository.GetAll();
-            return Ok(result);
+            try
+            {
+                var portolios = _repository.GetAll();
+                return Ok(portolios);
+            }
+            catch (Exception exception)
+            {
+                return Problem(exception.Message);
+            }
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
-            var product = await _repository.GetByIdAsync(id).ConfigureAwait(false);
-            if (product is null)
+            try
             {
-                return NotFound($"Produto não encontrado para o id {id}");
+                var customer = await _repository.GetByIdAsync(id).ConfigureAwait(false);
+                return Ok(customer);
             }
-            return Ok(product);
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return Problem(exception.Message);
+            }
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostAsync(CreateProduct model)
         {
-            long productId = await _repository.CreateAsync(model);
-
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = productId }, productId);
+            try
+            {
+                long productId = await _repository.CreateAsync(model);
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = productId }, productId);
+            }
+            catch (Exception exception)
+            {
+                return Problem(exception.Message);
+            }
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Update(long id, UpdateProduct model)
         {
             try
@@ -62,6 +90,9 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(long id)
         {
             try
@@ -69,11 +100,11 @@ namespace WebApi.Controllers
                 _repository.Delete(id);
                 return Ok();
             }
-            catch(ArgumentNullException exception)
+            catch (ArgumentNullException exception)
             {
                 return NotFound(exception.Message);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return Problem(exception.Message);
             }
