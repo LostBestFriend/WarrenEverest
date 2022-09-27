@@ -1,5 +1,5 @@
-﻿using AppModels.Mapper.Portfolio;
-using DomainModels.Models;
+﻿using AppModels.Mapper.Order;
+using AppModels.Mapper.Portfolio;
 
 namespace AppServices.Interfaces
 {
@@ -12,8 +12,8 @@ namespace AppServices.Interfaces
         void Deposit(decimal amount, long customerId, long portfolioId);
         void Withdraw(decimal amount, long customerId, long portfolioId);
         void ExecuteTodaysOrders();
-        void ExecuteBuyOrder(Order order);
-        void ExecuteSellOrder(Order order);
+        void ExecuteBuyOrder(OrderResult order);
+        void ExecuteSellOrder(OrderResult order);
         Task InvestAsync(int quotes, DateTime liquidateAt, long productId, long portfolioId);
         Task UninvestAsync(int quotes, DateTime liquidateAt, long productId, long portfolioId);
         void Delete(long portfolioId);

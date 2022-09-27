@@ -92,14 +92,10 @@ namespace AppServices.Services
                 throw new ArgumentException("Não há saldo suficiente na carteira para realizar este investimento");
             }
 
-            if (DateTime.Now >= liquidateAt)
+            if (DateTime.Now.Date >= liquidateAt.Date)
             {
-                _portfolioServices.Withdraw(amount, portfolioId);
-
-                if (!_portfolioProductServices.RelationExists(portfolioId, productId))
-                {
-                    _portfolioProductServices.CreateRelation(portfolioId, productId);
-                }
+                var orderResult = await _orderAppServices.GetByIdAsync(orderId);
+                ExecuteBuyOrder(orderResult);
             }
             transactionScope.Complete();
         }
@@ -113,23 +109,19 @@ namespace AppServices.Services
 
             if (quotes > availableQuotes)
             {
-                throw new ArgumentException($"A quantidade de cotas informada é maior do que as cotas existentes na carteira");
+                throw new ArgumentException("A quantidade de cotas informada é maior do que as cotas existentes na carteira");
             }
 
             decimal amount = product.UnitPrice * quotes;
-            var order = new CreateOrder(quotes, product.UnitPrice, amount,
+            var createOrder = new CreateOrder(quotes, product.UnitPrice, amount,
                                         liquidateAt, AppModels.Enums.OrderDirection.Sell, productId, portfolioId);
-            var orderId = await _orderAppServices.CreateAsync(order).ConfigureAwait(false);
+            var orderId = await _orderAppServices.CreateAsync(createOrder).ConfigureAwait(false);
 
 
-            if (DateTime.Now >= liquidateAt)
+            if (DateTime.Now.Date >= liquidateAt.Date)
             {
-                _portfolioServices.Deposit(amount, portfolioId);
-
-                if (quotes == availableQuotes)
-                {
-                    _portfolioProductServices.DeleteRelation(portfolioId, productId);
-                }
+                var orderResult = await _orderAppServices.GetByIdAsync(orderId);
+                ExecuteSellOrder(orderResult);
             }
             transactionScope.Complete();
         }
@@ -140,7 +132,7 @@ namespace AppServices.Services
 
             foreach (var order in orders)
             {
-                if (order.Direction == OrderDirection.Buy)
+                if (order.Direction == AppModels.Enums.OrderDirection.Buy)
                 {
                     ExecuteBuyOrder(order);
                 }
@@ -151,7 +143,7 @@ namespace AppServices.Services
             }
         }
 
-        public void ExecuteBuyOrder(Order order)
+        public void ExecuteBuyOrder(OrderResult order)
         {
             using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             _portfolioServices.Withdraw(order.NetValue, order.PortfolioId);
@@ -163,7 +155,7 @@ namespace AppServices.Services
             transactionScope.Complete();
         }
 
-        public void ExecuteSellOrder(Order order)
+        public void ExecuteSellOrder(OrderResult order)
         {
             using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             _portfolioServices.Deposit(order.NetValue, order.PortfolioId);

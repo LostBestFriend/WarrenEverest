@@ -1,5 +1,4 @@
 ﻿using AppModels.Mapper.Order;
-using DomainModels.Models;
 
 namespace AppServices.Interfaces
 {
@@ -8,7 +7,7 @@ namespace AppServices.Interfaces
         Task<long> CreateAsync(CreateOrder model);
         IEnumerable<OrderResult> GetAll();
         Task<OrderResult> GetByIdAsync(long id);
-        IList<Order> GetOrdersToExecute();
+        IEnumerable<OrderResult> GetOrdersToExecute();
         int GetAvailableQuotes(long portfolioId, long productId);
         void Update(long id, UpdateOrder model);
         void Delete(long id);

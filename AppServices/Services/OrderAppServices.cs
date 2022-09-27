@@ -26,7 +26,7 @@ namespace AppServices.Services
         public IEnumerable<OrderResult> GetAll()
         {
             var result = _orderServices.GetAll();
-            return _mapper.Map<IEnumerable<OrderResult>>(result);
+            return _mapper.Map<IList<OrderResult>>(result);
         }
 
         public async Task<OrderResult> GetByIdAsync(long id)
@@ -40,11 +40,11 @@ namespace AppServices.Services
             return _orderServices.GetAvailableQuotes(portfolioId, productId);
         }
 
-        public IList<Order> GetOrdersToExecute()
+        public IEnumerable<OrderResult> GetOrdersToExecute()
         {
             var orders = _orderServices.GetOrdersToExecute();
 
-            return orders;
+            return _mapper.Map<IEnumerable<OrderResult>>(orders);
             
         }
 
